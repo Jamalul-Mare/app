@@ -1,7 +1,7 @@
 package userauth.controller;
 
 import userauth.dto.UserDTO;
-import userauth.model.User;
+import userauth.user.User;
 import userauth.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

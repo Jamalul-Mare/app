@@ -1,13 +1,14 @@
-package userauth.model;
+package userauth.user;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

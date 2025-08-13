@@ -1,6 +1,6 @@
 package userauth.repository;
 
-import userauth.model.User;
+import userauth.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

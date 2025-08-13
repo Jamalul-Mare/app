@@ -1,7 +1,7 @@
 package userauth.service;
 
 import userauth.dto.UserDTO;
-import userauth.model.User;
+import userauth.user.User;
 import userauth.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
