@@ -1,13 +1,12 @@
-package com.example.app;
+package userauth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AppApplicationTests {
+public class DemoApplicationTests {
 
     @Test
     void contextLoads() {
     }
-
 }
