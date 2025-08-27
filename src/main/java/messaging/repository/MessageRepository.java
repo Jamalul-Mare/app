@@ -1,11 +1,21 @@
 package messaging.repository;
 
 import messaging.model.Message;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    List<Message> findBySenderIdAndReceiverId(Long senderId, Long receiverId);
-    List<Message> findByReceiverId(Long receiverId);
+    // inbox by receiver, sorted by your `timestamp` column
+    Page<Message> findByReceiverIdOrderByCreatedAtDesc(Long receiverId, Pageable pageable);
+
+    // optional: full conversation
+    @Query("""
+    select m from Message m
+    where (m.senderId = :a and m.receiverId = :b)
+       or (m.senderId = :b and m.receiverId = :a)
+    order by m.createdAt asc
+  """)
+    Page<Message> findThread(@Param("a") Long a, @Param("b") Long b, Pageable pageable);
 }

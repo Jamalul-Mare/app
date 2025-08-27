@@ -16,12 +16,12 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/api1/register")
     public ResponseEntity<User> register(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.register(userDTO));
     }
 
-    @PostMapping("/login")
+    @PostMapping("/api1/login")
     public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
         boolean success = userService.login(userDTO);
         return success ? ResponseEntity.ok("Login successful")

@@ -2,27 +2,23 @@ package messaging.service;
 
 import messaging.model.Message;
 import messaging.repository.MessageRepository;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MessageService {
-    private final MessageRepository messageRepository;
+    private final MessageRepository repo;
+    public MessageService(MessageRepository repo) { this.repo = repo; }
 
-    public MessageService(MessageRepository messageRepository) {
-        this.messageRepository = messageRepository;
+    public Message send(Long senderId, Long receiverId, String content) {
+        Message m = new Message();
+        m.setSenderId(senderId);
+        m.setReceiverId(receiverId);
+        m.setContent(content.trim());
+        return repo.save(m);
     }
 
-    public Message sendMessage(Message message) {
-        return messageRepository.save(message);
-    }
-
-    public List<Message> getMessagesBetweenUsers(Long senderId, Long receiverId) {
-        return messageRepository.findBySenderIdAndReceiverId(senderId, receiverId);
-    }
-
-    public List<Message> getMessagesForUser(Long userId) {
-        return messageRepository.findByReceiverId(userId);
+    public Page<Message> inbox(Long userId, int page, int size) {
+        return repo.findByReceiverIdOrderByCreatedAtDesc(userId, PageRequest.of(page, size));
     }
 }

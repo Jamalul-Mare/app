@@ -2,6 +2,7 @@ package userauth;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import userauth.dto.UserDTO;
 import userauth.repository.UserRepository;
 import userauth.service.UserService;
@@ -17,15 +18,16 @@ class UserServiceLoginTest {
     @Test
     void login_true_when_password_matches() {
         UserRepository repo = Mockito.mock(UserRepository.class);
-        // dacă ai PasswordEncoder în constructor, pasează-l și pe acela aici
         UserService service = new UserService(repo);
 
+        // "DB" user cu parolă HASH-uită
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User u = new User();
         u.setUsername("john");
-        u.setPassword("secret"); // dacă folosești encoder: pune HASH-ul aici
-
+        u.setPassword(encoder.encode("secret")); // IMPORTANT: bcrypt hash, nu text simplu
         Mockito.when(repo.findByUsername(eq("john"))).thenReturn(Optional.of(u));
 
+        // credențiale corecte
         UserDTO dto = new UserDTO();
         dto.setUsername("john");
         dto.setPassword("secret");
@@ -42,25 +44,25 @@ class UserServiceLoginTest {
 
         UserDTO dto = new UserDTO();
         dto.setUsername("ghost");
-        dto.setPassword("anything");
+        dto.setPassword("whatever");
 
         assertFalse(service.login(dto));
     }
 
     @Test
-    void login_false_when_password_wrong() {
+    void login_false_when_password_mismatch() {
         UserRepository repo = Mockito.mock(UserRepository.class);
         UserService service = new UserService(repo);
 
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User u = new User();
         u.setUsername("john");
-        u.setPassword("secret");
-
+        u.setPassword(encoder.encode("secret")); // hash pt. "secret"
         Mockito.when(repo.findByUsername(eq("john"))).thenReturn(Optional.of(u));
 
         UserDTO dto = new UserDTO();
         dto.setUsername("john");
-        dto.setPassword("bad");
+        dto.setPassword("bad"); // greșită
 
         assertFalse(service.login(dto));
     }
