@@ -28,6 +28,9 @@ public class Message {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "is_read", nullable = false)
+    private boolean isRead = false;
+
     @PrePersist
     void onCreate() {
         if (createdAt == null) createdAt = LocalDateTime.now();

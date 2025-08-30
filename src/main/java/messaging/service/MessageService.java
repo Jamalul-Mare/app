@@ -21,4 +21,9 @@ public class MessageService {
     public Page<Message> inbox(Long userId, int page, int size) {
         return repo.findByReceiverIdOrderByCreatedAtDesc(userId, PageRequest.of(page, size));
     }
+
+    public Page<Message> thread(Long a, Long b, int page, int size) {
+        return repo.findThread(a, b, PageRequest.of(page, size));
+    }
+
 }
