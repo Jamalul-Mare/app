@@ -1,3 +1,4 @@
+// userauth/service/UserService.java
 package userauth.service;
 
 import userauth.dto.UserDTO;
@@ -5,6 +6,8 @@ import userauth.user.User;
 import userauth.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -27,8 +30,12 @@ public class UserService {
     }
 
     public boolean login(UserDTO userDTO) {
+        return authenticate(userDTO).isPresent();
+    }
+
+    /** Returns the user iff credentials are valid. */
+    public Optional<User> authenticate(UserDTO userDTO) {
         return userRepository.findByUsername(userDTO.getUsername())
-                .map(user -> passwordEncoder.matches(userDTO.getPassword(), user.getPassword()))
-                .orElse(false);
+                .filter(u -> passwordEncoder.matches(userDTO.getPassword(), u.getPassword()));
     }
 }

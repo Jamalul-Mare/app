@@ -1,6 +1,8 @@
+// userauth/controller/AuthController.java
 package userauth.controller;
 
 import userauth.dto.UserDTO;
+import userauth.dto.LoginResponse;
 import userauth.user.User;
 import userauth.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final UserService userService;
-
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
+    public AuthController(UserService userService) { this.userService = userService; }
 
     @PostMapping("/api1/register")
     public ResponseEntity<User> register(@RequestBody UserDTO userDTO) {
@@ -22,9 +21,9 @@ public class AuthController {
     }
 
     @PostMapping("/api1/login")
-    public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
-        boolean success = userService.login(userDTO);
-        return success ? ResponseEntity.ok("Login successful")
-                : ResponseEntity.status(401).body("Invalid credentials");
+    public ResponseEntity<LoginResponse> login(@RequestBody UserDTO userDTO) {
+        return userService.authenticate(userDTO)
+                .map(u -> ResponseEntity.ok(new LoginResponse(u.getId(), u.getUsername())))
+                .orElseGet(() -> ResponseEntity.status(401).build());
     }
 }

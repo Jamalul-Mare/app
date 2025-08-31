@@ -10,9 +10,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"userauth", "connection_f_b", "messaging"})
-@EnableJpaRepositories(basePackages = {"userauth.repository", "messaging.repository"})
-@EntityScan(basePackages = {"userauth.user", "messaging.model"})
+@ComponentScan(basePackages = {"userauth", "connection_f_b", "messaging", "posts"})
+@EnableJpaRepositories(basePackages = {"userauth.repository", "messaging.repository", "posts.repository"})
+@EntityScan(basePackages = {"userauth.user", "messaging.model", "posts.model"})
 public class DemoApplication {
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
